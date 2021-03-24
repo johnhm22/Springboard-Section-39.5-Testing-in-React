@@ -1,0 +1,42 @@
+Part 1: Demo the App & Read the Code
+App started and examined. Noticed it crashes after clicking on arrows three times. Also back/left arrow produces the same results as forward/right arrow
+Component hierarchy consists of:
+App.js
+Carousel.js
+Card.js
+
+Props passed into Carousel are in the same file
+
+Part 2: Smoke and Snapshot tests
+Smoke test written for Card.test.js and passed
+Snapshot test written for Card.test.js and passed
+New folder _snaphots_ created and populated with Card.test.js.snap
+New file shows snapshot of DOM
+
+Same performed for Carousel.js component with success
+
+Part 3: Bug! Left arrow
+Test created to test if left arrow works and, as expected, test failed.
+Used queryByAltText to select the alt text for the image
+As the attribute data-testId has been added to eachh arrow in the Carousel component, we can queryByTestId to select the left and right arrow keys
+Used fireEvent.click on left and right arrows to simulate user clicking arrows to move between images
+
+Part 3: fixing the left arrow
+A new function has been written called goBackward, which is very similar to the existing goForward, but the cardIdx value is reduced by one when called.
+This has replaced goForward in the <i> tag for the left arrow
+
+The test was rerun and it passed.
+
+
+Part 4: Bug! Exhausting the image array
+Test to check that left arrow is not present when first image is shown written and, as expected, fails when run.
+Test also written for right arrow. Component is loaded and then fireEvent.click(rightArrow) is called twice to get to the last image, then the check for the right arrow is done. As expected, the test fails.
+
+Code in Carousel.js changed.
+The left arrow is shown if cardIdx !== 0
+The right arrow is shown if cardIdx !== props.cardData.length-1
+
+Both tests pass after code change, but the snapshot test fails along with the test "works when you click on the left arrow"
+The snapshot was updated and passes
+The left arrow test failed because the code tried to assign the left arrow to a variable when the compnent was loaded, but due to the code update, the left arrow was not present until at least the second image was displayed. Putting the variable assignment to a later stage in the test code resolved this issue.
+The tests were run again and all passed.
